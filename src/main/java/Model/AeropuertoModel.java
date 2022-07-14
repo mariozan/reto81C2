@@ -6,9 +6,8 @@ package Model;
 
 import Class.Aeropuerto;
 import Controller.Conn;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -33,5 +32,28 @@ public class AeropuertoModel {
             System.out.println("Error" + e.getMessage());
         }  
         return 0; // SI algo sale mal
+    }
+    
+    public ArrayList<Aeropuerto> Read() {
+        Connection conn = conexion.getConnection();
+        ArrayList<Aeropuerto> lista_aeropuertos = new ArrayList();
+        String query = "SELECT * FROM aeropuerto;";
+        try {
+            PreparedStatement newStatement = conn.prepareStatement(query);
+            ResultSet resultados = newStatement.executeQuery();
+            while (resultados.next()) {
+                int id = resultados.getInt(1);
+                String nombre = resultados.getString(2);
+                String ciudad = resultados.getString(3);
+                String pais = resultados.getString(4);
+                int coord_x = resultados.getInt(5);
+                int coord_y = resultados.getInt(6);
+                Aeropuerto aero = new Aeropuerto(id, nombre, ciudad, pais, coord_x, coord_y);
+                lista_aeropuertos.add(aero);
+            }
+        } catch (Exception e) {
+            System.out.println("Error:" + e.getMessage());
+        }
+        return lista_aeropuertos;
     }
 }

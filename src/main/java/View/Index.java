@@ -5,6 +5,7 @@
 package View;
 
 import Class.*;
+import Model.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,13 +19,15 @@ public class Index extends javax.swing.JFrame {
     /**
      * Creates new form Index
      */
-    ArrayList <Aeropuerto> listaAeropuertos = new ArrayList();
+    AeropuertoModel aeropuerto_model = new AeropuertoModel();
+    ArrayList <Aeropuerto> listaAeropuertos = aeropuerto_model.Read();
     ArrayList <Avion> listaAviones = new ArrayList();
     ArrayList <Ruta> listaRutas = new ArrayList();
 
 
     public Index() {
         initComponents();
+        cargarListaTablaAerouertos();
     }
     
     public void cargarListaTablaAerouertos() {
@@ -379,6 +382,7 @@ public class Index extends javax.swing.JFrame {
         }else{
             //Creo un objeto y lo agrego a una lista de Aeropuertos
             Aeropuerto aero = new Aeropuerto(id, nombre, ciudad, pais, coord_x, coord_y);
+            aeropuerto_model.Create(aero);
             listaAeropuertos.add(aero);
             JOptionPane.showMessageDialog(this, "Aeropuerto " + nombre + " fue creado correctamente");
             cargarListaTablaAerouertos();
