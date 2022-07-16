@@ -432,6 +432,8 @@ public class Index extends javax.swing.JFrame {
                     listaAeropuertos.get(i).setCoord_x(coord_x);
                     listaAeropuertos.get(i).setCoord_y(coord_y);
                     existe = true;
+                    Aeropuerto aero = new Aeropuerto(id, nombre, ciudad, pais, coord_x, coord_y);
+                    aeropuerto_model.Update(aero, id);
                     cargarListaTablaAerouertos();
                     JOptionPane.showMessageDialog(this, "Aeropuerto editado correctamente");
                     limpiarCamposAeropuerto();
@@ -449,11 +451,16 @@ public class Index extends javax.swing.JFrame {
         int id = (int) txtIdAeropuerto.getValue(); // Spiner
         boolean existe = false;
         for (int i = 0; i < listaAeropuertos.size(); i++) {
-            if (listaAeropuertos.get(i).getId() == id) {
+            if (listaAeropuertos.get(i).getId() == id) {                
+                int resultado = aeropuerto_model.Delete(id);
+                if(resultado == 1){
                     listaAeropuertos.remove(listaAeropuertos.get(i));
                     JOptionPane.showMessageDialog(this, "Aeropuerto eliminado correctamente");
+                    cargarListaTablaAerouertos();
+                }else{
+                    JOptionPane.showMessageDialog(this, "El Aeropuerto no puede ser eliminado");
+                }
                 existe = true;
-                cargarListaTablaAerouertos();
                 limpiarCamposAeropuerto();
                 break;
             }

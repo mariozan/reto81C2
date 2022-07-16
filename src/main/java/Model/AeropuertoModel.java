@@ -56,4 +56,47 @@ public class AeropuertoModel {
         }
         return lista_aeropuertos;
     }
+    
+    public int Update(Aeropuerto a, int id) {
+        Connection conn = conexion.getConnection();
+        String query = "UPDATE aeropuerto "
+                + "SET nombre = ?, "
+                + "ciudad = ?, "
+                + "pais = ?, "
+                + "coord_x = ?, "
+                + "coord_y = ? "
+                + "WHERE id = ?";        
+         try {
+            PreparedStatement newStatement = conn.prepareStatement(query);
+            newStatement.setString(1, a.getNombre());
+            newStatement.setString(2, a.getCiudad());
+            newStatement.setString(3, a.getPais());
+            newStatement.setDouble(4, a.getCoord_x());
+            newStatement.setDouble(5, a.getCoord_y());
+            newStatement.setInt(6, id);
+            newStatement.executeUpdate();
+            return 1;
+        } catch (Exception exp) {
+            System.out.println("Error: " + exp.getMessage());
+        }
+        return 0;
+    }
+    
+    public int Delete(int id) {
+        Connection conn = conexion.getConnection();
+        String query = "DELETE FROM aeropuerto WHERE id = ?;";
+        try {
+            PreparedStatement newStatement = conn.prepareStatement(query);
+            newStatement.setInt(1, id);
+            newStatement.executeUpdate();
+            return 1;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    
+    
+
 }
