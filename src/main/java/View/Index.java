@@ -20,6 +20,7 @@ public class Index extends javax.swing.JFrame {
      * Creates new form Index
      */
     AeropuertoModel aeropuerto_model = new AeropuertoModel();
+    RutaModel ruta_model = new RutaModel();
     ArrayList <Aeropuerto> listaAeropuertos = aeropuerto_model.Read();
     ArrayList <Avion> listaAviones = new ArrayList();
     ArrayList <Ruta> listaRutas = new ArrayList();
@@ -45,7 +46,21 @@ public class Index extends javax.swing.JFrame {
             tab.addRow(datos);
         }
         tableAeropuertos.setModel(tab);
+        cargarComboOrigen();
     } 
+    
+    public void cargarComboOrigen() {
+        comboOrigen.removeAllItems();
+        comboOrigen.addItem("");
+        comboDestino.removeAllItems();
+        comboDestino.addItem("");
+        for (Aeropuerto aeropuerto : listaAeropuertos) {
+            comboOrigen.addItem(aeropuerto.getId() + "-" + aeropuerto.getNombre());
+            comboDestino.addItem(aeropuerto.getId() + "-" + aeropuerto.getNombre());
+        }
+        comboOrigen.setSelectedIndex(0);
+        comboDestino.setSelectedIndex(0);
+    }
     
     public void limpiarCamposAeropuerto(){
         txtIdAeropuerto.setValue(0);
@@ -98,6 +113,18 @@ public class Index extends javax.swing.JFrame {
         btnGuardarAvion = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        comboDestino = new javax.swing.JComboBox<>();
+        txtIdRuta = new javax.swing.JSpinner();
+        comboOrigen = new javax.swing.JComboBox<>();
+        btnGuardarRuta = new javax.swing.JButton();
+        btnEditarRuta = new javax.swing.JButton();
+        btnBuscarRuta = new javax.swing.JButton();
+        btnEliminarRuta = new javax.swing.JButton();
+        txtTiempoRuta = new javax.swing.JSpinner();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
 
@@ -313,15 +340,90 @@ public class Index extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("ListarAviones", jPanel4);
 
+        jLabel10.setText("origen");
+
+        jLabel11.setText("destino");
+
+        jLabel12.setText("Tiempo Estimado");
+
+        jLabel13.setText("id");
+
+        comboDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        comboOrigen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnGuardarRuta.setText("Guardar");
+        btnGuardarRuta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarRutaActionPerformed(evt);
+            }
+        });
+
+        btnEditarRuta.setText("Editar");
+
+        btnBuscarRuta.setText("Buscar");
+
+        btnEliminarRuta.setText("Eliminar");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 535, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addGap(121, 121, 121)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtIdRuta)
+                            .addComponent(comboDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboOrigen, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTiempoRuta))
+                        .addGap(105, 105, 105))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(btnGuardarRuta)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnEditarRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnBuscarRuta)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                        .addComponent(btnEliminarRuta)
+                        .addGap(33, 33, 33))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(txtIdRuta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(28, 28, 28))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(comboOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(comboDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(txtTiempoRuta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(78, 78, 78)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGuardarRuta)
+                    .addComponent(btnEditarRuta)
+                    .addComponent(btnBuscarRuta)
+                    .addComponent(btnEliminarRuta))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ruta", jPanel5);
@@ -471,6 +573,36 @@ public class Index extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnEliminarAeropuertoActionPerformed
 
+    private void btnGuardarRutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarRutaActionPerformed
+        // TODO add your handling code here:
+        int id = (int) txtIdRuta.getValue();
+        
+        String origen = comboOrigen.getSelectedItem().toString();
+        String[] partes_origen = origen.split("-");
+        int id_origen = Integer.parseInt(partes_origen[0]);
+        String nombre_origen = partes_origen[1];
+        
+        String destino = comboDestino.getSelectedItem().toString();
+        String[] partes_destino = destino.split("-");
+        int id_destino = Integer.parseInt(partes_destino[0]);
+        String nombre_destino = partes_destino[1];
+        
+        int tiempo = (int) txtTiempoRuta.getValue();
+        
+        if(origen.equals("") || destino.equals("") || tiempo == 0 || destino == origen){
+            JOptionPane.showMessageDialog(null, "Error: revisar los campos");
+        }else{
+            Ruta ruta = new Ruta(id, id_origen, id_destino, tiempo);
+            int result = ruta_model.Create(ruta);
+            ruta.setId(result);
+            listaRutas.add(ruta);
+            JOptionPane.showMessageDialog(this, "Ruta " + result + " fue creado correctamente");
+//            cargarListaTablaRuta();
+//            limpiarCamposRuta();
+        }
+        
+    }//GEN-LAST:event_btnGuardarRutaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -508,11 +640,21 @@ public class Index extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarAeropuerto;
+    private javax.swing.JButton btnBuscarRuta;
     private javax.swing.JButton btnEditarAeropuerto;
+    private javax.swing.JButton btnEditarRuta;
     private javax.swing.JButton btnEliminarAeropuerto;
+    private javax.swing.JButton btnEliminarRuta;
     private javax.swing.JButton btnGuardarAeropuerto;
     private javax.swing.JButton btnGuardarAvion;
+    private javax.swing.JButton btnGuardarRuta;
+    private javax.swing.JComboBox<String> comboDestino;
+    private javax.swing.JComboBox<String> comboOrigen;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -537,8 +679,10 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JSpinner txtCoordYAoerpuerto;
     private javax.swing.JSpinner txtIdAeropuerto;
     private javax.swing.JSpinner txtIdAvion;
+    private javax.swing.JSpinner txtIdRuta;
     private javax.swing.JTextField txtModeloAvion;
     private javax.swing.JTextField txtNombreAeropuerto;
     private javax.swing.JTextField txtPaisAeropuerto;
+    private javax.swing.JSpinner txtTiempoRuta;
     // End of variables declaration//GEN-END:variables
 }
