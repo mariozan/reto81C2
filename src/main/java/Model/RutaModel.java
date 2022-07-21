@@ -4,13 +4,10 @@
  */
 package Model;
 
-import Class.Aeropuerto;
 import Class.Ruta;
 import Controller.Conn;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -37,6 +34,32 @@ public class RutaModel {
             System.out.println("Error" + e.getMessage());
         }  
         return 0; // SI algo sale mal
+    }
+    
+    public ArrayList<Ruta> Read() {
+        Connection conn = conexion.getConnection();
+        ArrayList<Ruta> lista_ruta = new ArrayList();
+        String query = "SELECT ruta.*, origen.nombre AS nombre_origen, destino.nombre AS nombre_destino "
+                     + "FROM ruta "
+                     + "INNER JOIN aeropuerto AS origen ON ruta.origen = origen.id "
+                     + "INNER JOIN aeropuerto as destino ON ruta.destino = destino.id";
+        try {
+            PreparedStatement newStatement = conn.prepareStatement(query);
+            ResultSet resultados = newStatement.executeQuery();
+            while (resultados.next()) {
+                int id = resultados.getInt(1);
+                int origen = resultados.getInt(2);
+                int destino = resultados.getInt(3);
+                int tiempo_estimado = resultados.getInt(4);
+                String nombre_origen = resultados.getString(5);
+                String nombre_destino = resultados.getString(6);
+                Ruta r = new Ruta(id, origen, destino, tiempo_estimado, nombre_origen, nombre_destino);
+                lista_ruta.add(r);
+            }
+        } catch (Exception e) {
+            System.out.println("Error:" + e.getMessage());
+        }
+        return lista_ruta;
     }
     
 }

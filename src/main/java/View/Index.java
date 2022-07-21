@@ -23,12 +23,13 @@ public class Index extends javax.swing.JFrame {
     RutaModel ruta_model = new RutaModel();
     ArrayList <Aeropuerto> listaAeropuertos = aeropuerto_model.Read();
     ArrayList <Avion> listaAviones = new ArrayList();
-    ArrayList <Ruta> listaRutas = new ArrayList();
+    ArrayList <Ruta> listaRutas = ruta_model.Read();
 
 
     public Index() {
         initComponents();
         cargarListaTablaAerouertos();
+        cargarTablaRuta();
     }
     
     public void cargarListaTablaAerouertos() {
@@ -47,6 +48,21 @@ public class Index extends javax.swing.JFrame {
         }
         tableAeropuertos.setModel(tab);
         cargarComboOrigen();
+    } 
+    
+    public void cargarTablaRuta() {
+        DefaultTableModel tab = new DefaultTableModel();
+        String[] cabecera = {"Id", "Origen", "Destino", "Tiempo Estimado"};
+        Object[] datos = new Object[cabecera.length];
+        tab.setColumnIdentifiers(cabecera);
+        for (int i = 0; i < listaRutas.size(); i++) {
+            datos[0] = listaRutas.get(i).getId();
+            datos[1] = listaRutas.get(i).getNombre_origen();
+            datos[2] = listaRutas.get(i).getNombre_destino();
+            datos[3] = listaRutas.get(i).getTiempo_estimado();
+            tab.addRow(datos);
+        }
+        tableRutas.setModel(tab);
     } 
     
     public void cargarComboOrigen() {
@@ -126,6 +142,8 @@ public class Index extends javax.swing.JFrame {
         btnEliminarRuta = new javax.swing.JButton();
         txtTiempoRuta = new javax.swing.JSpinner();
         jPanel6 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableRutas = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -250,7 +268,7 @@ public class Index extends javax.swing.JFrame {
                 .addGroup(tabAeropuertoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtCoordYAoerpuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(198, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Aeropuerto", tabAeropuerto);
@@ -322,7 +340,7 @@ public class Index extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(txtModeloAvion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(283, Short.MAX_VALUE))
+                .addContainerGap(343, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Avion", jPanel3);
@@ -335,7 +353,7 @@ public class Index extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGap(0, 455, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("ListarAviones", jPanel4);
@@ -423,20 +441,39 @@ public class Index extends javax.swing.JFrame {
                     .addComponent(btnEditarRuta)
                     .addComponent(btnBuscarRuta)
                     .addComponent(btnEliminarRuta))
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ruta", jPanel5);
+
+        tableRutas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tableRutas);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 535, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("ListarRutas", jPanel6);
@@ -592,13 +629,12 @@ public class Index extends javax.swing.JFrame {
         if(origen.equals("") || destino.equals("") || tiempo == 0 || destino == origen){
             JOptionPane.showMessageDialog(null, "Error: revisar los campos");
         }else{
-            Ruta ruta = new Ruta(id, id_origen, id_destino, tiempo);
+            Ruta ruta = new Ruta(id, id_origen, id_destino, tiempo, nombre_origen, nombre_destino);
             int result = ruta_model.Create(ruta);
             ruta.setId(result);
             listaRutas.add(ruta);
             JOptionPane.showMessageDialog(this, "Ruta " + result + " fue creado correctamente");
-//            cargarListaTablaRuta();
-//            limpiarCamposRuta();
+            cargarTablaRuta();
         }
         
     }//GEN-LAST:event_btnGuardarRutaActionPerformed
@@ -670,10 +706,12 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel tabAeropuerto;
     private javax.swing.JTable tableAeropuertos;
+    private javax.swing.JTable tableRutas;
     private javax.swing.JTextField txtCiudadAeropuerto;
     private javax.swing.JSpinner txtCoordXAeropuerto;
     private javax.swing.JSpinner txtCoordYAoerpuerto;
